@@ -1,0 +1,2 @@
+# Chronicle
+Daily XP tracker
