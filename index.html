@@ -6,10 +6,10 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Chronicle">
+<meta name="apple-mobile-web-app-title" content="Quest Log">
 <meta name="theme-color" content="#0d0b08">
 <link rel="manifest" id="pwa-manifest">
-<title>Chronicle of Deeds</title>
+<title>Quest Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
@@ -548,8 +548,7 @@ body::before {
 
   <div class="header">
     <div class="title-block">
-      <div class="app-title">Chronicle of Deeds</div>
-      <div class="app-subtitle">Daily Quest Log</div>
+      <div class="app-title">Quest Log</div>
       <div class="day-label" id="day-label"></div>
     </div>
     <div class="header-right">
@@ -564,8 +563,8 @@ body::before {
     </div>
   </div>
 
-  <div id="complete-banner" class="complete-banner">⚔ Daily quest complete — the chronicle grows ⚔</div>
-  <div id="bad-day-banner" class="bad-day-banner">The burden is great — target reduced to <strong id="bad-day-target-val"></strong> XP</div>
+  <div id="complete-banner" class="complete-banner">⚔ Daily quest complete ⚔</div>
+  <div id="bad-day-banner" class="bad-day-banner">Stamina saver active — target reduced to <strong id="bad-day-target-val"></strong> XP</div>
 
   <div class="xp-bar-section">
     <div class="xp-label-row">
@@ -578,19 +577,19 @@ body::before {
   <div class="bad-day-section">
     <button class="bad-day-btn-big" id="bad-day-btn" onclick="toggleBadDay()">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><line x1="8" y1="4.5" x2="8" y2="8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="10.5" r="0.8" fill="currentColor"/></svg>
-      The burden is heavy
+      Low on stamina
     </button>
   </div>
 
   <div class="stat-row">
     <div class="stat-card"><div class="s-label">XP Earned</div><div class="s-val green" id="stat-earned">0</div></div>
-    <div class="stat-card"><div class="s-label">Deeds Done</div><div class="s-val" id="stat-done">0</div></div>
+    <div class="stat-card"><div class="s-label">Quests Complete</div><div class="s-val" id="stat-done">0</div></div>
     <div class="stat-card"><div class="s-label">Best Streak</div><div class="s-val amber" id="stat-best">0</div></div>
   </div>
 
   <div class="week-section">
     <div class="section-header">
-      <div class="section-title">The Past Seven Days</div>
+      <div class="section-title">This Week</div>
       <div class="section-rule"></div>
     </div>
     <div class="week-grid" id="week-grid"></div>
@@ -600,18 +599,18 @@ body::before {
     <div class="settings-row">
       <label>Daily XP Target</label>
       <input type="number" id="settings-target" min="10" max="500" value="50" />
-      <button class="add-btn" onclick="saveSettings()" style="height:32px;padding:0 12px;font-size:11px;">Inscribe</button>
+      <button class="add-btn" onclick="saveSettings()" style="height:32px;padding:0 12px;font-size:11px;">Save</button>
     </div>
   </div>
 
   <div class="controls-row">
     <div class="section-header" style="margin-bottom:0;flex:1;">
-      <div class="section-title">Deeds &amp; Quests</div>
+      <div class="section-title">Quests</div>
       <div class="section-rule"></div>
     </div>
     <div class="controls-right" style="margin-left:10px;">
-      <button class="pill-btn" id="sort-btn" onclick="toggleSort()">By Order</button>
-      <button class="pill-btn" id="settings-btn" onclick="toggleSettings()">Runes</button>
+      <button class="pill-btn" id="sort-btn" onclick="toggleSort()">By Category</button>
+      <button class="pill-btn" id="settings-btn" onclick="toggleSettings()">Settings</button>
     </div>
   </div>
 
@@ -620,31 +619,31 @@ body::before {
 
   <div class="add-section">
     <div class="section-header" style="margin-bottom:0.75rem;">
-      <div class="section-title">Record a New Deed</div>
+      <div class="section-title">Record a New Quest</div>
       <div class="section-rule"></div>
     </div>
     <div class="add-row">
-      <input type="text" id="new-name" placeholder="Name this deed..." />
+      <input type="text" id="new-name" placeholder="Name this quest..." />
       <select id="new-cat"></select>
       <input type="number" id="new-pts" placeholder="XP" min="1" max="100" />
-      <button class="add-btn primary" onclick="addTask()">Inscribe</button>
+      <button class="add-btn primary" onclick="addTask()">Add</button>
     </div>
     <div class="add-row2">
       <label class="checkbox-label">
         <input type="checkbox" id="new-oneoff" />
-        A singular deed — shall not carry forward
+        Today only — won't carry forward
       </label>
     </div>
     <div class="bottom-row">
-      <span class="hint-text">✦ Dashed border marks deeds of the day</span>
-      <button class="add-btn" onclick="resetDay()">Begin Anew</button>
+      <span class="hint-text">✦ Dashed border marks quests of the day</span>
+      <button class="add-btn" onclick="resetDay()">Reset Day</button>
     </div>
   </div>
 </div>
 
 <script>
 const CATEGORIES = [
-  { id: 'all', label: 'All Deeds', color: '#6a5840' },
+  { id: 'all', label: 'All Quests', color: '#6a5840' },
   { id: 'selfcare', label: 'Self', color: '#2a8060' },
   { id: 'training', label: 'Training', color: '#c8922a' },
   { id: 'nutrition', label: 'Sustenance', color: '#607830' },
@@ -683,7 +682,7 @@ let settings = loadSettings();
 let state = loadState();
 let theme = localStorage.getItem('dailyxp_theme') || 'dark';
 let activeFilter = 'all';
-let sortByCategory = false;
+let sortByCategory = true;
 let editingId = null;
 let notingId = null;
 let settingsOpen = false;
@@ -755,12 +754,12 @@ function render() {
   const bdBanner = document.getElementById('bad-day-banner');
   if (state.badDay) {
     bdBtn.classList.add('active');
-    bdBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> The burden is carried`;
+    bdBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Stamina saver on`;
     bdBanner.style.display = 'block';
     document.getElementById('bad-day-target-val').textContent = target;
   } else {
     bdBtn.classList.remove('active');
-    bdBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><line x1="8" y1="4.5" x2="8" y2="8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="10.5" r="0.8" fill="currentColor"/></svg> The burden is heavy`;
+    bdBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><line x1="8" y1="4.5" x2="8" y2="8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="10.5" r="0.8" fill="currentColor"/></svg> Low on stamina`;
     bdBanner.style.display = 'none';
   }
 
@@ -827,7 +826,7 @@ function renderTabs() {
 function renderTasks() {
   const el = document.getElementById('task-list');
   let visible = activeFilter === 'all' ? state.tasks : state.tasks.filter(t => t.cat === activeFilter);
-  if (!visible.length) { el.innerHTML = `<div style="font-size:14px;color:var(--text3);padding:0.5rem 0;font-style:italic;">No deeds recorded in this order.</div>`; return; }
+  if (!visible.length) { el.innerHTML = `<div style="font-size:14px;color:var(--text3);padding:0.5rem 0;font-style:italic;">No quests recorded in this order.</div>`; return; }
   if (sortByCategory) {
     const order = ['selfcare','training','nutrition','work','home','recovery'];
     const groups = {};
@@ -858,15 +857,15 @@ function taskHTML(t) {
     <div class="cat-dot" style="background:${cat.color};box-shadow:0 0 5px ${cat.color}88;"></div>
     <div class="task-body">
       <div class="task-main">
-        <div class="task-name" onclick="${isEditing?'':` startEdit(${t.id})`}">${escHtml(t.name)}${t.oneOff?'<span class="one-off-badge">today</span>':''}</div>
+        <div class="task-name" onclick="${isEditing?'':` toggleTask(${t.id})`}">${escHtml(t.name)}${t.oneOff?'<span class="one-off-badge">today</span>':''}</div>
         <div class="edit-fields">
           <input class="edit-name-input" id="edit-name-${t.id}" value="${escHtml(t.name)}" onkeydown="editKeydown(event,${t.id})"/>
           <input class="edit-pts-input" id="edit-pts-${t.id}" type="number" value="${t.pts}" min="1" max="999" onkeydown="editKeydown(event,${t.id})"/>
         </div>
-        <div class="task-pts" onclick="${isEditing?'':` startEdit(${t.id})`}">+${t.pts} XP</div>
+        <div class="task-pts">+${t.pts} XP</div>
       </div>
       ${t.note && !isNoting ? `<div class="task-note">${escHtml(t.note)}</div>` : ''}
-      ${isNoting ? `<input class="task-note-input" id="note-input-${t.id}" placeholder="Record your account..." value="${escHtml(t.note||'')}" onkeydown="noteKeydown(event,${t.id})" onblur="saveNote(${t.id})"/>` : ''}
+      ${isNoting ? `<input class="task-note-input" id="note-input-${t.id}" placeholder="Add a note..." value="${escHtml(t.note||'')}" onkeydown="noteKeydown(event,${t.id})" onblur="saveNote(${t.id})"/>` : ''}
     </div>
     <div class="task-actions">
       <button class="icon-btn edit-btn" title="Edit" onclick="startEdit(${t.id})"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></button>
@@ -920,7 +919,7 @@ function addTask() {
   save(); render();
 }
 function resetDay() {
-  if (!confirm('Begin a new day? All deeds shall be reset.')) return;
+  if (!confirm('Begin a new day? All quests shall be reset.')) return;
   state.tasks.forEach(t => t.done=false); state.completedToday=false; state.badDay=false; editingId=null; notingId=null;
   save(); render();
 }
@@ -929,12 +928,12 @@ render();
 
 // ── PWA MANIFEST (injected as data URI so everything stays one file) ──
 (function() {
-  const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0d0b08"/><rect x="40" y="40" width="432" height="432" rx="8" fill="none" stroke="#7a5c28" stroke-width="6"/><rect x="56" y="56" width="400" height="400" rx="4" fill="none" stroke="#3d3020" stroke-width="2"/><text x="256" y="200" font-family="serif" font-size="80" font-weight="bold" fill="#c8922a" text-anchor="middle" dominant-baseline="middle">XP</text><rect x="80" y="230" width="352" height="20" rx="2" fill="#1a1510" stroke="#7a5c28" stroke-width="2"/><rect x="82" y="232" width="200" height="16" rx="1" fill="url(#g)"/><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7a5820"/><stop offset="100%" stop-color="#e8b84a"/></linearGradient></defs><text x="256" y="320" font-family="serif" font-size="28" fill="#6a5840" text-anchor="middle">Chronicle of Deeds</text><text x="256" y="380" font-family="serif" font-size="18" fill="#3d3020" text-anchor="middle">✦ Daily Quest Log ✦</text></svg>`;
+  const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0d0b08"/><rect x="40" y="40" width="432" height="432" rx="8" fill="none" stroke="#7a5c28" stroke-width="6"/><rect x="56" y="56" width="400" height="400" rx="4" fill="none" stroke="#3d3020" stroke-width="2"/><text x="256" y="200" font-family="serif" font-size="80" font-weight="bold" fill="#c8922a" text-anchor="middle" dominant-baseline="middle">XP</text><rect x="80" y="230" width="352" height="20" rx="2" fill="#1a1510" stroke="#7a5c28" stroke-width="2"/><rect x="82" y="232" width="200" height="16" rx="1" fill="url(#g)"/><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7a5820"/><stop offset="100%" stop-color="#e8b84a"/></linearGradient></defs><text x="256" y="320" font-family="serif" font-size="28" fill="#6a5840" text-anchor="middle">Quest Log</text><text x="256" y="380" font-family="serif" font-size="18" fill="#3d3020" text-anchor="middle">✦ Daily Quest Log ✦</text></svg>`;
   const iconUrl = 'data:image/svg+xml,' + encodeURIComponent(iconSvg);
 
   const manifest = {
-    name: 'Chronicle of Deeds',
-    short_name: 'Chronicle',
+    name: 'Quest Log',
+    short_name: 'Quest Log',
     description: 'Daily XP quest log',
     start_url: '.',
     display: 'standalone',
