@@ -690,7 +690,7 @@ let nextId = state.tasks.length ? Math.max(...state.tasks.map(t => t.id)) + 1 : 
 
 document.documentElement.setAttribute('data-theme', theme);
 
-function todayKey() { return new Date().toISOString().slice(0, 10); }
+function todayKey() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
 function loadSettings() {
   try { const r = localStorage.getItem('dailyxp_settings'); if (r) return JSON.parse(r); } catch(e) {}
