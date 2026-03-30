@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="night">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Habit Tracker — Daily XP</title>
+  <title>Quest Log</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0a0f1a" />
+  <meta name="theme-color" content="#1a1208" />
 </head>
 <body>
 
@@ -17,14 +17,15 @@
   <header class="app-header">
     <div class="header-inner">
       <div class="header-brand">
-        <div class="brand-icon">◈</div>
+        <div class="brand-icon">⚔</div>
         <div class="brand-text">
-          <span class="brand-title">HABIT TRACKER</span>
+          <span class="brand-title">Quest Log</span>
           <span class="brand-sub" id="date-display">Loading...</span>
         </div>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" id="btn-manage" title="Manage Tasks" aria-label="Manage tasks">⊞</button>
+        <button class="icon-btn" id="btn-theme" title="Toggle Day/Night" aria-label="Toggle day/night mode">☽</button>
+        <button class="icon-btn" id="btn-manage" title="Manage Quests" aria-label="Manage quests">✦</button>
         <button class="icon-btn" id="btn-reset" title="Reset Today" aria-label="Reset today">↺</button>
       </div>
     </div>
@@ -83,7 +84,7 @@
 
     <!-- Week Heatmap -->
     <section class="week-section">
-      <div class="section-label">THIS WEEK</div>
+      <div class="section-label">Chronicles of the Week</div>
       <div class="week-grid" id="week-grid"></div>
     </section>
 
@@ -95,7 +96,7 @@
     <!-- Task List -->
     <section class="tasks-section">
       <div class="tasks-header">
-        <span class="section-label">TASKS</span>
+        <span class="section-label">Quests & Deeds</span>
         <span class="tasks-count" id="tasks-remaining">0 remaining</span>
       </div>
       <div class="task-list" id="task-list"></div>
@@ -107,15 +108,15 @@
   <div class="modal-overlay hidden" id="modal-overlay">
     <div class="modal" id="modal-manage">
       <div class="modal-header">
-        <span class="modal-title">MANAGE TASKS</span>
+        <span class="modal-title">Manage Quests</span>
         <button class="modal-close" id="btn-modal-close">✕</button>
       </div>
 
       <!-- Add Task -->
       <div class="modal-section">
-        <div class="modal-section-label">ADD NEW TASK</div>
+        <div class="modal-section-label">Inscribe a New Quest</div>
         <div class="add-task-form">
-          <input type="text" id="new-task-name" placeholder="Task name..." maxlength="60" />
+          <input type="text" id="new-task-name" placeholder="Name this quest..." maxlength="60" />
           <div class="add-task-row2">
             <select id="new-task-cat"></select>
             <input type="number" id="new-task-xp" placeholder="XP" min="1" max="200" />
@@ -124,23 +125,23 @@
               <span class="toggle-text">One-off</span>
             </label>
           </div>
-          <button class="btn-primary" id="btn-add-task">ADD TASK</button>
+          <button class="btn-primary" id="btn-add-task">Inscribe Quest</button>
         </div>
       </div>
 
       <!-- Settings -->
       <div class="modal-section">
-        <div class="modal-section-label">SETTINGS</div>
+        <div class="modal-section-label">Tome Settings</div>
         <div class="settings-row">
           <label class="settings-label">Daily XP Target</label>
           <input type="number" id="settings-target" min="10" max="1000" />
-          <button class="btn-secondary" id="btn-save-settings">SAVE</button>
+          <button class="btn-secondary" id="btn-save-settings">Save</button>
         </div>
       </div>
 
       <!-- Edit / Delete Existing Tasks -->
       <div class="modal-section">
-        <div class="modal-section-label">EDIT TASKS</div>
+        <div class="modal-section-label">Edit Quests</div>
         <div class="edit-task-list" id="edit-task-list"></div>
       </div>
     </div>

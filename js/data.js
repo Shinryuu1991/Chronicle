@@ -1,12 +1,12 @@
 // ── DEFAULT CATEGORIES ──────────────────────────────────────────────────────
 const CATEGORIES = [
-  { id: 'all',        label: 'ALL',       color: '#7dd3fc' },
-  { id: 'body',       label: 'BODY',      color: '#4ade80' },
-  { id: 'mind',       label: 'MIND',      color: '#c084fc' },
-  { id: 'nutrition',  label: 'NUTRITION', color: '#fb923c' },
-  { id: 'home',       label: 'HOME',      color: '#f9a8d4' },
-  { id: 'work',       label: 'WORK',      color: '#60a5fa' },
-  { id: 'recovery',   label: 'RECOVERY',  color: '#a78bfa' },
+  { id: 'all',        label: 'All',       color: 'var(--text-secondary)' },
+  { id: 'body',       label: 'Body',      color: 'var(--col-body)' },
+  { id: 'mind',       label: 'Mind',      color: 'var(--col-mind)' },
+  { id: 'nutrition',  label: 'Nutrition', color: 'var(--col-nutrition)' },
+  { id: 'home',       label: 'Home',      color: 'var(--col-home)' },
+  { id: 'work',       label: 'Work',      color: 'var(--col-work)' },
+  { id: 'recovery',   label: 'Recovery',  color: 'var(--col-recovery)' },
 ];
 
 // ── DEFAULT TASKS ────────────────────────────────────────────────────────────

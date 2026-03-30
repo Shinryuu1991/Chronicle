@@ -41,6 +41,16 @@ function checkMidnight() {
 
 // ── EVENT BINDING ─────────────────────────────────────────────────────────────
 function bindEvents() {
+  // Theme toggle
+  const savedTheme = localStorage.getItem('ht_theme') || 'night';
+  applyTheme(savedTheme);
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'night' ? 'day' : 'night';
+    applyTheme(next);
+    localStorage.setItem('ht_theme', next);
+  });
+
   document.getElementById('btn-manage').addEventListener('click', openModal);
   document.getElementById('btn-modal-close').addEventListener('click', closeModal);
   document.getElementById('modal-overlay').addEventListener('click', e => {
@@ -373,6 +383,11 @@ function showXPBurst(xp) {
     el.style.top  = (rect.top + window.scrollY) + 'px';
   }
   setTimeout(() => el.remove(), 900);
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('btn-theme').textContent = theme === 'night' ? '☀' : '☽';
 }
 
 function escHtml(str) {
