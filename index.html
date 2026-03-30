@@ -8,7 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Quest Log">
 <meta name="theme-color" content="#0d0b08">
-<link rel="manifest" id="pwa-manifest">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
 <title>Quest Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -74,7 +75,7 @@
   --teal-bg: #e8f4ee;
   --teal-border: #80c8a8;
   --teal-dark: #0a4028;
-  --blue: #1848808;
+  --blue: #2060a0;
   --blue-light: #2060a0;
   --blue-bg: #e8f0f8;
   --blue-border: #90b8e0;
@@ -104,7 +105,6 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
-/* Noise texture overlay */
 body::before {
   content: '';
   position: fixed;
@@ -118,89 +118,46 @@ body::before {
 
 #app { width: 100%; max-width: 620px; position: relative; z-index: 1; }
 
-/* ── DECORATIVE CORNER RUNES ── */
-.corner-frame {
-  position: relative;
-  padding: 0.1rem;
-}
-.corner-frame::before, .corner-frame::after {
-  content: '✦';
-  position: absolute;
-  font-size: 10px;
-  color: var(--border-gold);
-  opacity: 0.6;
-}
-.corner-frame::before { top: 0; left: 0; }
-.corner-frame::after { top: 0; right: 0; }
-
-/* ── HEADER ── */
 .header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-gold);
-  position: relative;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 1.5rem; padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-gold); position: relative;
 }
 .header::after {
-  content: '';
-  position: absolute;
-  bottom: -3px;
-  left: 0; right: 0;
-  height: 1px;
-  background: var(--border);
+  content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+  height: 1px; background: var(--border);
 }
-
 .title-block { display: flex; flex-direction: column; }
 .app-title {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--gold-light);
-  letter-spacing: 0.08em;
-  text-shadow: 0 0 20px rgba(200,146,42,0.4);
-  line-height: 1.2;
+  font-family: var(--font-display); font-size: 22px; font-weight: 700;
+  color: var(--gold-light); letter-spacing: 0.08em;
+  text-shadow: 0 0 20px rgba(200,146,42,0.4); line-height: 1.2;
 }
-.app-subtitle { font-size: 13px; color: var(--text3); font-style: italic; margin-top: 2px; }
 .day-label { font-size: 13px; color: var(--text2); font-style: italic; }
-
 .header-right { display: flex; align-items: center; gap: 10px; }
 .streak-block { text-align: right; }
 .streak-label { font-size: 11px; color: var(--text3); font-family: var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; }
 .streak-val { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--gold); }
 
-/* Theme toggle */
 .theme-toggle {
   width: 34px; height: 34px; border-radius: 4px;
-  border: 1px solid var(--border-gold);
-  background: var(--surface2);
-  color: var(--text2);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-  font-size: 14px;
+  border: 1px solid var(--border-gold); background: var(--surface2);
+  color: var(--text2); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
 }
 .theme-toggle:hover { background: var(--surface3); color: var(--gold-light); border-color: var(--gold); }
 
-/* ── XP BAR ── */
 .xp-bar-section { margin-bottom: 1.25rem; }
 .xp-label-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
 .xp-label { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.12em; color: var(--text3); text-transform: uppercase; }
 .xp-numbers { font-family: var(--font-display); font-size: 13px; color: var(--gold); }
-
 .xp-bar-outer {
-  height: 14px;
-  background: var(--surface);
-  border: 1px solid var(--border-gold);
-  border-radius: 2px;
-  overflow: hidden;
-  position: relative;
+  height: 14px; background: var(--surface); border: 1px solid var(--border-gold);
+  border-radius: 2px; overflow: hidden; position: relative;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 0 8px rgba(200,146,42,0.1);
 }
 .xp-bar-outer::before {
-  content: '';
-  position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0;
   background: repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(0,0,0,0.2) 19px, rgba(0,0,0,0.2) 20px);
   z-index: 2; pointer-events: none;
 }
@@ -208,110 +165,58 @@ body::before {
   height: 100%;
   background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-light));
   transition: width 0.5s cubic-bezier(.4,0,.2,1);
-  position: relative;
-  box-shadow: 0 0 12px rgba(200,146,42,0.6);
+  position: relative; box-shadow: 0 0 12px rgba(200,146,42,0.6);
 }
 .xp-bar-fill::after {
-  content: '';
-  position: absolute; top: 0; right: 0; bottom: 0; width: 3px;
-  background: rgba(255,255,255,0.4);
-  filter: blur(1px);
+  content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 3px;
+  background: rgba(255,255,255,0.4); filter: blur(1px);
 }
 .xp-bar-fill.bad-day {
   background: linear-gradient(90deg, var(--ember-border), var(--ember), var(--ember-light));
   box-shadow: 0 0 12px rgba(200,72,32,0.6);
 }
 
-/* ── COMPLETE BANNER ── */
 .complete-banner {
-  background: var(--teal-bg);
-  border: 1px solid var(--teal-border);
-  border-radius: 3px;
-  padding: 0.6rem 1rem;
-  font-family: var(--font-display);
-  font-size: 13px;
-  color: var(--teal-light);
-  text-align: center;
-  letter-spacing: 0.05em;
-  margin-bottom: 1rem;
-  display: none;
+  background: var(--teal-bg); border: 1px solid var(--teal-border); border-radius: 3px;
+  padding: 0.6rem 1rem; font-family: var(--font-display); font-size: 13px;
+  color: var(--teal-light); text-align: center; letter-spacing: 0.05em;
+  margin-bottom: 1rem; display: none;
   text-shadow: 0 0 10px rgba(42,128,96,0.5);
 }
-
-/* ── BAD DAY BANNER ── */
 .bad-day-banner {
-  background: var(--ember-bg);
-  border: 1px solid var(--ember-border);
-  border-radius: 3px;
-  padding: 0.5rem 1rem;
-  font-size: 14px;
-  font-style: italic;
-  color: var(--ember-light);
-  text-align: center;
-  margin-bottom: 1rem;
-  display: none;
+  background: var(--ember-bg); border: 1px solid var(--ember-border); border-radius: 3px;
+  padding: 0.5rem 1rem; font-size: 14px; font-style: italic;
+  color: var(--ember-light); text-align: center; margin-bottom: 1rem; display: none;
 }
 
-/* ── BAD DAY BUTTON ── */
 .bad-day-section { display: flex; justify-content: center; margin-bottom: 1.25rem; }
 .bad-day-btn-big {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 28px;
-  border-radius: 3px;
-  border: 1px solid var(--ember-border);
-  background: var(--ember-bg);
-  color: var(--ember);
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-transform: uppercase;
+  display: flex; align-items: center; gap: 10px; padding: 10px 28px;
+  border-radius: 3px; border: 1px solid var(--ember-border);
+  background: var(--ember-bg); color: var(--ember);
+  font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; text-transform: uppercase;
 }
 .bad-day-btn-big:hover { background: var(--ember-border); color: var(--ember-light); border-color: var(--ember); box-shadow: 0 0 12px rgba(200,72,32,0.3); }
 .bad-day-btn-big.active { background: var(--ember); color: #fff; border-color: var(--ember-light); box-shadow: 0 0 16px rgba(200,72,32,0.5); }
 
-/* ── STAT CARDS ── */
 .stat-row { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 1.5rem; }
 .stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border-gold);
-  border-radius: 3px;
-  padding: 0.75rem 1rem;
-  position: relative;
-  overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border-gold);
+  border-radius: 3px; padding: 0.75rem 1rem; position: relative; overflow: hidden;
 }
 .stat-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
 }
-.stat-card .s-label {
-  font-family: var(--font-display);
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
+.stat-card .s-label { font-family: var(--font-display); font-size: 10px; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
 .stat-card .s-val { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--text); }
 .stat-card .s-val.green { color: var(--teal-light); }
 .stat-card .s-val.amber { color: var(--gold); }
 
-/* ── WEEK HEATMAP ── */
 .week-section { margin-bottom: 1.5rem; }
-.section-header {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem;
-}
-.section-title {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text3);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
+.section-title { font-family: var(--font-display); font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 0.14em; text-transform: uppercase; }
 .section-rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-gold), transparent); }
 
 .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
@@ -329,14 +234,9 @@ body::before {
 .week-day.today .week-day-label { color: var(--gold); }
 .week-day.today .week-day-bar-wrap { border-color: var(--border-gold); }
 
-/* ── SETTINGS PANEL ── */
 .settings-panel {
-  background: var(--surface);
-  border: 1px solid var(--border-gold);
-  border-radius: 3px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.5rem;
-  display: none;
+  background: var(--surface); border: 1px solid var(--border-gold);
+  border-radius: 3px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: none;
 }
 .settings-panel.open { display: block; }
 .settings-row { display: flex; align-items: center; gap: 10px; }
@@ -344,66 +244,46 @@ body::before {
 .settings-row input[type="number"] {
   width: 80px; height: 32px; font-size: 13px; padding: 0 8px;
   border: 1px solid var(--border-gold); border-radius: 2px;
-  background: var(--surface2); color: var(--gold);
-  font-family: var(--font-display); outline: none;
+  background: var(--surface2); color: var(--gold); font-family: var(--font-display); outline: none;
 }
 .settings-row input:focus { border-color: var(--gold); box-shadow: 0 0 6px rgba(200,146,42,0.3); }
 
-/* ── CONTROLS ROW ── */
 .controls-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; gap: 6px; flex-wrap: wrap; }
-.controls-right { display: flex; gap: 6px; }
+.controls-right { display: flex; gap: 6px; margin-left: 10px; }
 
-/* ── CATEGORY TABS ── */
 .category-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
 .cat-tab {
-  font-family: var(--font-display);
-  font-size: 11px; padding: 4px 12px; border-radius: 2px;
-  border: 1px solid var(--border2);
-  background: var(--surface); color: var(--text2);
-  cursor: pointer; transition: all 0.15s;
-  letter-spacing: 0.06em;
+  font-family: var(--font-display); font-size: 11px; padding: 4px 12px; border-radius: 2px;
+  border: 1px solid var(--border2); background: var(--surface); color: var(--text2);
+  cursor: pointer; transition: all 0.15s; letter-spacing: 0.06em;
 }
 .cat-tab:hover { border-color: var(--border-gold); color: var(--text); }
 .cat-tab.active { background: var(--gold-bg); border-color: var(--gold); color: var(--gold-light); box-shadow: 0 0 8px rgba(200,146,42,0.2); }
 
 .pill-btn {
-  font-family: var(--font-display);
-  font-size: 11px; padding: 4px 12px; border-radius: 2px;
-  border: 1px solid var(--border2);
-  background: var(--surface); color: var(--text2);
-  cursor: pointer; white-space: nowrap; transition: all 0.15s;
-  letter-spacing: 0.06em;
+  font-family: var(--font-display); font-size: 11px; padding: 4px 12px; border-radius: 2px;
+  border: 1px solid var(--border2); background: var(--surface); color: var(--text2);
+  cursor: pointer; white-space: nowrap; transition: all 0.15s; letter-spacing: 0.06em;
 }
 .pill-btn:hover { border-color: var(--border-gold); color: var(--text); }
 .pill-btn.active-blue { background: var(--blue-bg); border-color: var(--blue-light); color: var(--blue-light); }
 
-/* ── TASK LIST ── */
 .task-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 1.5rem; }
-
 .cat-group-label {
-  font-family: var(--font-display);
-  font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
-  text-transform: uppercase; padding: 0.6rem 0 0.3rem;
-  border-top: 1px solid var(--border); margin-top: 4px;
+  font-family: var(--font-display); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 0.6rem 0 0.3rem; border-top: 1px solid var(--border); margin-top: 4px;
 }
 .cat-group-label:first-child { border-top: none; margin-top: 0; padding-top: 0; }
 
 .task-item {
-  display: flex; align-items: flex-start; gap: 8px;
-  padding: 8px 10px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  user-select: none;
-  transition: border-color 0.15s, background 0.15s;
-  position: relative;
+  display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 2px;
+  user-select: none; transition: border-color 0.15s, background 0.15s; position: relative;
 }
 .task-item::before {
-  content: '';
-  position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
-  background: transparent;
-  transition: background 0.2s;
-  border-radius: 2px 0 0 2px;
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: transparent; transition: background 0.2s; border-radius: 2px 0 0 2px;
 }
 .task-item:hover { border-color: var(--border2); }
 .task-item:hover::before { background: var(--border-gold); }
@@ -417,23 +297,17 @@ body::before {
 .task-main { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 
 .task-check {
-  width: 18px; height: 18px;
-  border: 1px solid var(--border2);
-  border-radius: 2px;
+  width: 18px; height: 18px; border: 1px solid var(--border2); border-radius: 2px;
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; cursor: pointer; transition: all 0.2s;
-  margin-top: 2px; background: var(--surface2);
+  flex-shrink: 0; cursor: pointer; transition: all 0.2s; margin-top: 2px; background: var(--surface2);
 }
 .task-item.done .task-check { background: var(--teal); border-color: var(--teal-light); box-shadow: 0 0 6px rgba(42,128,96,0.4); }
 .check-svg { display: none; }
 .task-item.done .check-svg { display: block; }
-
-.cat-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; box-shadow: 0 0 4px currentColor; }
-
+.cat-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
 .task-name { font-size: 15px; color: var(--text); cursor: pointer; line-height: 1.4; flex: 1; }
 .task-item.done .task-name { color: var(--text3); text-decoration: line-through; }
 .task-item.editing .task-name { display: none; }
-
 .task-note { font-size: 13px; color: var(--text3); margin-top: 2px; font-style: italic; }
 .task-note-input {
   width: 100%; height: 28px; font-size: 13px; padding: 0 8px;
@@ -442,38 +316,29 @@ body::before {
   font-family: var(--font-body); font-style: italic; outline: none; margin-top: 4px;
 }
 .task-note-input:focus { border-color: var(--gold); }
-
 .edit-fields { flex: 1; display: none; align-items: center; gap: 6px; }
 .task-item.editing .edit-fields { display: flex; }
 .edit-name-input {
   flex: 1; height: 28px; font-size: 14px; padding: 0 8px;
   border: 1px solid var(--border-gold); border-radius: 2px;
-  background: var(--surface2); color: var(--text);
-  font-family: var(--font-body); outline: none; min-width: 0;
+  background: var(--surface2); color: var(--text); font-family: var(--font-body); outline: none; min-width: 0;
 }
 .edit-name-input:focus { border-color: var(--gold); }
 .edit-pts-input {
   width: 52px; height: 28px; font-size: 13px; padding: 0 6px;
   border: 1px solid var(--border-gold); border-radius: 2px;
-  background: var(--surface2); color: var(--gold);
-  font-family: var(--font-display); outline: none;
+  background: var(--surface2); color: var(--gold); font-family: var(--font-display); outline: none;
 }
 .edit-pts-input:focus { border-color: var(--gold); }
-
-.task-pts {
-  font-family: var(--font-display); font-size: 12px; font-weight: 600;
-  color: var(--gold); white-space: nowrap; cursor: pointer;
-  letter-spacing: 0.04em;
-}
+.task-pts { font-family: var(--font-display); font-size: 12px; font-weight: 600; color: var(--gold); white-space: nowrap; letter-spacing: 0.04em; }
 .task-item.done .task-pts { color: var(--text3); }
 .task-item.editing .task-pts { display: none; }
 
 .task-actions { display: flex; gap: 3px; flex-shrink: 0; margin-top: 2px; }
 .icon-btn {
-  width: 24px; height: 24px; border-radius: 2px;
-  border: 1px solid var(--border);
-  background: transparent; color: var(--text3);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 2px; border: 1px solid var(--border);
+  background: transparent; color: var(--text3); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
   transition: all 0.15s; padding: 0; flex-shrink: 0;
 }
 .icon-btn:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
@@ -490,47 +355,47 @@ body::before {
   vertical-align: middle; letter-spacing: 0.08em; text-transform: uppercase;
 }
 
-/* ── ADD SECTION ── */
+.reorder-banner {
+  background: var(--gold-bg); border: 1px solid var(--gold-dim); border-radius: 3px;
+  padding: 0.5rem 1rem; font-family: var(--font-display); font-size: 12px;
+  letter-spacing: 0.06em; color: var(--gold); text-align: center; margin-bottom: 0.75rem; display: none;
+}
+.reorder-banner.active { display: block; }
+.task-item.reorder-active { border-color: var(--gold-dim); background: var(--gold-bg); }
+.reorder-btns { display: none; flex-direction: column; gap: 2px; flex-shrink: 0; margin-top: 1px; }
+.reorder-mode .reorder-btns { display: flex; }
+.reorder-mode .task-actions { display: none; }
+.reorder-mode .task-check { pointer-events: none; opacity: 0.4; }
+.reorder-mode .task-name { pointer-events: none; }
+.icon-btn.reorder-up, .icon-btn.reorder-down { height: 22px; width: 26px; }
+
 .add-section { border-top: 1px solid var(--border-gold); padding-top: 1.25rem; }
 .add-row { display: grid; grid-template-columns: 1fr 100px 64px auto; gap: 8px; align-items: center; margin-bottom: 8px; }
 .add-row2 { display: flex; gap: 8px; align-items: center; margin-bottom: 0.75rem; }
 .add-row input[type="text"], .add-row input[type="number"] {
   height: 36px; font-size: 14px; padding: 0 10px;
   border: 1px solid var(--border2); border-radius: 2px;
-  background: var(--surface); color: var(--text);
-  font-family: var(--font-body); outline: none; width: 100%;
+  background: var(--surface); color: var(--text); font-family: var(--font-body); outline: none; width: 100%;
 }
 .add-row input:focus { border-color: var(--gold); box-shadow: 0 0 6px rgba(200,146,42,0.2); }
 .add-row select {
   height: 36px; font-size: 13px; padding: 0 8px;
   border: 1px solid var(--border2); border-radius: 2px;
-  background: var(--surface); color: var(--text);
-  font-family: var(--font-body); cursor: pointer; outline: none; width: 100%;
+  background: var(--surface); color: var(--text); font-family: var(--font-body); cursor: pointer; outline: none; width: 100%;
 }
 .add-btn {
-  height: 36px; padding: 0 14px;
-  font-family: var(--font-display); font-size: 12px; letter-spacing: 0.06em;
-  border-radius: 2px; border: 1px solid var(--border2);
-  background: var(--surface); color: var(--text2);
-  cursor: pointer; white-space: nowrap; transition: all 0.15s;
+  height: 36px; padding: 0 14px; font-family: var(--font-display); font-size: 12px;
+  letter-spacing: 0.06em; border-radius: 2px; border: 1px solid var(--border2);
+  background: var(--surface); color: var(--text2); cursor: pointer; white-space: nowrap; transition: all 0.15s;
 }
 .add-btn:hover { background: var(--surface2); border-color: var(--border-gold); color: var(--text); }
-.add-btn.primary {
-  background: var(--gold-bg); color: var(--gold-light);
-  border-color: var(--gold); text-shadow: 0 0 8px rgba(200,146,42,0.4);
-}
+.add-btn.primary { background: var(--gold-bg); color: var(--gold-light); border-color: var(--gold); text-shadow: 0 0 8px rgba(200,146,42,0.4); }
 .add-btn.primary:hover { background: var(--gold-dim); color: #fff; box-shadow: 0 0 12px rgba(200,146,42,0.3); }
-
-.checkbox-label {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 14px; font-style: italic; color: var(--text2); cursor: pointer;
-}
+.checkbox-label { display: flex; align-items: center; gap: 6px; font-size: 14px; font-style: italic; color: var(--text2); cursor: pointer; }
 .checkbox-label input { cursor: pointer; accent-color: var(--gold); }
-
 .bottom-row { display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; flex-wrap: wrap; gap: 8px; }
 .hint-text { font-size: 13px; color: var(--text3); font-style: italic; }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border-gold); border-radius: 2px; }
@@ -608,13 +473,14 @@ body::before {
       <div class="section-title">Quests</div>
       <div class="section-rule"></div>
     </div>
-    <div class="controls-right" style="margin-left:10px;">
+    <div class="controls-right">
       <button class="pill-btn" id="sort-btn" onclick="toggleSort()">By Category</button>
       <button class="pill-btn" id="settings-btn" onclick="toggleSettings()">Settings</button>
     </div>
   </div>
 
   <div class="category-tabs" id="cat-tabs" style="margin-top:0.75rem;"></div>
+  <div id="reorder-banner" class="reorder-banner">Reorder mode — use arrows to move quests. Tap elsewhere to exit.</div>
   <div class="task-list" id="task-list"></div>
 
   <div class="add-section">
@@ -680,12 +546,14 @@ const DEFAULT_TASKS = [
 
 let settings = loadSettings();
 let state = loadState();
-let theme = localStorage.getItem('dailyxp_theme') || 'dark';
+let theme = localStorage.getItem('quest_theme') || 'dark';
 let activeFilter = 'all';
 let sortByCategory = true;
 let editingId = null;
 let notingId = null;
 let settingsOpen = false;
+let reorderMode = false;
+let longPressTimer = null;
 let nextId = state.tasks.length ? Math.max(...state.tasks.map(t => t.id)) + 1 : 100;
 
 document.documentElement.setAttribute('data-theme', theme);
@@ -693,17 +561,17 @@ document.documentElement.setAttribute('data-theme', theme);
 function todayKey() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
 function loadSettings() {
-  try { const r = localStorage.getItem('dailyxp_settings'); if (r) return JSON.parse(r); } catch(e) {}
+  try { const r = localStorage.getItem('quest_settings'); if (r) return JSON.parse(r); } catch(e) {}
   return { target: 50 };
 }
 function saveSettings() {
   const val = parseInt(document.getElementById('settings-target').value);
-  if (val && val >= 10) { settings.target = val; localStorage.setItem('dailyxp_settings', JSON.stringify(settings)); }
+  if (val && val >= 10) { settings.target = val; localStorage.setItem('quest_settings', JSON.stringify(settings)); }
   settingsOpen = false; render();
 }
 function loadState() {
   try {
-    const raw = localStorage.getItem('dailyxp_v4');
+    const raw = localStorage.getItem('quest_v1');
     if (raw) {
       const s = JSON.parse(raw);
       const today = todayKey();
@@ -718,7 +586,7 @@ function loadState() {
 }
 function save() {
   state.history[state.date] = { xp: xpEarned(), target: effectiveTarget(), badDay: state.badDay };
-  try { localStorage.setItem('dailyxp_v4', JSON.stringify(state)); } catch(e) {}
+  try { localStorage.setItem('quest_v1', JSON.stringify(state)); } catch(e) {}
 }
 function effectiveTarget() { return state.badDay ? Math.round(settings.target / 2) : settings.target; }
 function xpEarned() { return state.tasks.filter(t => t.done).reduce((a, t) => a + t.pts, 0); }
@@ -726,7 +594,7 @@ function xpEarned() { return state.tasks.filter(t => t.done).reduce((a, t) => a 
 function toggleTheme() {
   theme = theme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('dailyxp_theme', theme);
+  localStorage.setItem('quest_theme', theme);
   updateThemeIcon();
 }
 function updateThemeIcon() {
@@ -783,6 +651,16 @@ function render() {
   if (settingsOpen) document.getElementById('settings-target').value = settings.target;
   document.getElementById('sort-btn').className = 'pill-btn' + (sortByCategory ? ' active-blue' : '');
 
+  const reorderBanner = document.getElementById('reorder-banner');
+  const taskListEl = document.getElementById('task-list');
+  if (reorderMode) {
+    reorderBanner.classList.add('active');
+    taskListEl.classList.add('reorder-mode');
+  } else {
+    reorderBanner.classList.remove('active');
+    taskListEl.classList.remove('reorder-mode');
+  }
+
   renderWeek(); renderTabs(); renderTasks(); renderCatSelect();
 }
 
@@ -793,8 +671,8 @@ function renderWeek() {
   for (let i = 6; i >= 0; i--) { const d = new Date(today); d.setDate(today.getDate() - i); days.push(d); }
   const dayLabels = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const todayStr = todayKey();
-  let maxXp = settings.target;
   const todayXp = xpEarned();
+  let maxXp = settings.target;
   days.forEach(d => { const h = state.history[d.toISOString().slice(0,10)]; if (h && h.xp > maxXp) maxXp = h.xp; });
   if (todayXp > maxXp) maxXp = todayXp;
   el.innerHTML = days.map(d => {
@@ -850,7 +728,13 @@ function taskHTML(t) {
   const isEditing = editingId === t.id;
   const isNoting = notingId === t.id;
   const noteActive = isNoting || (t.note && t.note.trim());
-  return `<div class="task-item${t.done?' done':''}${isEditing?' editing':''}${t.oneOff?' one-off':''}" id="task-${t.id}">
+  const catTasks = state.tasks.filter(x => x.cat === t.cat);
+  const idxInCat = catTasks.findIndex(x => x.id === t.id);
+  const canUp = idxInCat > 0;
+  const canDown = idxInCat < catTasks.length - 1;
+  return `<div class="task-item${t.done?' done':''}${isEditing?' editing':''}${t.oneOff?' one-off':''}" id="task-${t.id}"
+    onmousedown="startLongPress(${t.id})" onmouseup="cancelLongPress()" onmouseleave="cancelLongPress()"
+    ontouchstart="startLongPress(${t.id})" ontouchend="cancelLongPress()" ontouchmove="cancelLongPress()">
     <div class="task-check" onclick="toggleTask(${t.id})">
       <svg class="check-svg" width="11" height="11" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
@@ -866,6 +750,14 @@ function taskHTML(t) {
       </div>
       ${t.note && !isNoting ? `<div class="task-note">${escHtml(t.note)}</div>` : ''}
       ${isNoting ? `<input class="task-note-input" id="note-input-${t.id}" placeholder="Add a note..." value="${escHtml(t.note||'')}" onkeydown="noteKeydown(event,${t.id})" onblur="saveNote(${t.id})"/>` : ''}
+    </div>
+    <div class="reorder-btns">
+      <button class="icon-btn reorder-up" onclick="moveTask(${t.id},-1)" ${canUp?'':'disabled'} style="opacity:${canUp?1:0.3}">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><polyline points="2,8 6,4 10,8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="icon-btn reorder-down" onclick="moveTask(${t.id},1)" ${canDown?'':'disabled'} style="opacity:${canDown?1:0.3}">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><polyline points="2,4 6,8 10,4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
     <div class="task-actions">
       <button class="icon-btn edit-btn" title="Edit" onclick="startEdit(${t.id})"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></button>
@@ -884,9 +776,29 @@ function renderCatSelect() {
   CATEGORIES.filter(c => c.id !== 'all').forEach(c => { const o = document.createElement('option'); o.value = c.id; o.textContent = c.label; el.appendChild(o); });
 }
 
-function setFilter(id) { activeFilter = id; editingId = null; notingId = null; render(); }
-function toggleSort() { sortByCategory = !sortByCategory; activeFilter = 'all'; editingId = null; notingId = null; render(); }
+function setFilter(id) { activeFilter = id; editingId = null; notingId = null; reorderMode = false; render(); }
+function toggleSort() { sortByCategory = !sortByCategory; activeFilter = 'all'; editingId = null; notingId = null; reorderMode = false; render(); }
 function toggleSettings() { settingsOpen = !settingsOpen; render(); }
+
+function startLongPress(id) {
+  cancelLongPress();
+  longPressTimer = setTimeout(() => {
+    if (editingId || notingId) return;
+    reorderMode = true; render();
+  }, 500);
+}
+function cancelLongPress() { if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } }
+function exitReorder() { reorderMode = false; render(); }
+function moveTask(id, dir) {
+  const t = state.tasks.find(t => t.id === id); if (!t) return;
+  const catTasks = state.tasks.filter(x => x.cat === t.cat);
+  const globalIdx = state.tasks.indexOf(t);
+  const idxInCat = catTasks.indexOf(t);
+  const swapWith = catTasks[idxInCat + dir]; if (!swapWith) return;
+  const swapGlobalIdx = state.tasks.indexOf(swapWith);
+  state.tasks[globalIdx] = swapWith; state.tasks[swapGlobalIdx] = t;
+  save(); render();
+}
 function toggleBadDay() {
   state.badDay = !state.badDay;
   if (!state.badDay && state.completedToday && xpEarned() < settings.target) state.completedToday = false;
@@ -926,38 +838,14 @@ function resetDay() {
 
 render();
 
-// ── PWA MANIFEST (injected as data URI so everything stays one file) ──
-(function() {
-  const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0d0b08"/><rect x="40" y="40" width="432" height="432" rx="8" fill="none" stroke="#7a5c28" stroke-width="6"/><rect x="56" y="56" width="400" height="400" rx="4" fill="none" stroke="#3d3020" stroke-width="2"/><text x="256" y="200" font-family="serif" font-size="80" font-weight="bold" fill="#c8922a" text-anchor="middle" dominant-baseline="middle">XP</text><rect x="80" y="230" width="352" height="20" rx="2" fill="#1a1510" stroke="#7a5c28" stroke-width="2"/><rect x="82" y="232" width="200" height="16" rx="1" fill="url(#g)"/><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7a5820"/><stop offset="100%" stop-color="#e8b84a"/></linearGradient></defs><text x="256" y="320" font-family="serif" font-size="28" fill="#6a5840" text-anchor="middle">Quest Log</text><text x="256" y="380" font-family="serif" font-size="18" fill="#3d3020" text-anchor="middle">✦ Daily Quest Log ✦</text></svg>`;
-  const iconUrl = 'data:image/svg+xml,' + encodeURIComponent(iconSvg);
+document.getElementById('app').addEventListener('click', e => {
+  if (!reorderMode) return;
+  if (!e.target.closest('.task-item') && !e.target.closest('.reorder-btns')) exitReorder();
+});
 
-  const manifest = {
-    name: 'Quest Log',
-    short_name: 'Quest Log',
-    description: 'Daily XP quest log',
-    start_url: '.',
-    display: 'standalone',
-    orientation: 'portrait',
-    background_color: '#0d0b08',
-    theme_color: '#0d0b08',
-    icons: [
-      { src: iconUrl, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
-      { src: iconUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
-    ]
-  };
-
-  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  document.getElementById('pwa-manifest').href = url;
-
-  // Apple touch icon (also inline)
-  const appleLink = document.createElement('link');
-  appleLink.rel = 'apple-touch-icon';
-  appleLink.href = iconUrl;
-  document.head.appendChild(appleLink);
-})();
-
-// Service worker disabled — requires HTTPS hosting to function
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(() => console.log('SW registered')).catch(e => console.log('SW failed', e));
+}
 </script>
 </body>
 </html>
