@@ -60,6 +60,7 @@ function bindEvents() {
     if (confirm('Reset all completions for today?')) {
       state.today.completed = [];
       saveToday(state.today);
+      sfxReset();
       render();
       showToast('Today reset.');
     }
@@ -262,22 +263,68 @@ function renderEditList() {
 
 // ── TASK ACTIONS ──────────────────────────────────────────────────────────────
 function toggleTask(id) {
-  const set = new Set(state.today.completed);
-  let earned = 0;
+  const set  = new Set(state.today.completed);
   const task = state.tasks.find(t => t.id === id);
   if (!task) return;
 
+  const { earned: xpBefore, target } = getXPData();
+  const wasAtTarget = xpBefore >= target;
+
   if (set.has(id)) {
+    // ── UNDO ──
     set.delete(id);
-    earned = -task.xp;
+    state.today.completed = Array.from(set);
+    saveToday(state.today);
+    sfxUndo();
+    render();
   } else {
+    // ── COMPLETE ──
+    const el = document.querySelector(`.task-item[data-id="${id}"]`);
+    const cat = CATEGORIES.find(c => c.id === task.category) || CATEGORIES[1];
+
+    // Capture XP bar position before state change
+    const pctBefore = Math.min(1, xpBefore / target);
+
     set.add(id);
-    earned = task.xp;
-    showXPBurst(earned);
+    state.today.completed = Array.from(set);
+    saveToday(state.today);
+
+    const { earned: xpAfter } = getXPData();
+    const pctAfter  = Math.min(1, xpAfter / target);
+    const nowAtTarget = xpAfter >= target;
+
+    // 1. Particle burst + flash on the task row
+    if (el) {
+      particleBurst(el, cat.color);
+      flashTask(el);
+    }
+
+    // 2. Sound
+    if (nowAtTarget && !wasAtTarget) {
+      sfxTargetReached();
+    } else {
+      sfxQuestComplete();
+    }
+
+    // 3. XP bar sweep animation
+    animateXPBar(pctBefore, pctAfter);
+
+    // 4. XP number burst
+    showXPBurst(task.xp);
+
+    // 5. Target flash overlay
+    if (nowAtTarget && !wasAtTarget) {
+      setTimeout(targetReachedFlash, 300);
+      showToast('Daily target reached! ✦');
+    }
+
+    // 6. Slide task out, then re-render
+    if (el) {
+      slideOutTask(el, () => render());
+    } else {
+      render();
+    }
   }
-  state.today.completed = Array.from(set);
-  saveToday(state.today);
-  render();
 }
 
 function handleAddTask() {
@@ -300,6 +347,7 @@ function handleAddTask() {
 
   render();
   renderEditList();
+  sfxAddQuest();
   showToast(`"${name}" added — ${xp} XP.`);
 }
 

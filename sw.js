@@ -6,6 +6,7 @@ const ASSETS = [
   './css/style.css',
   './js/data.js',
   './js/storage.js',
+  './js/fx.js',
   './js/app.js',
   './manifest.json',
   'https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap',

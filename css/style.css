@@ -746,3 +746,53 @@ select { cursor: pointer; }
   .settings-row { flex-wrap: wrap; }
   .settings-row input[type="number"] { max-width: none; }
 }
+
+/* ── FX ANIMATIONS ─────────────────────────────────────────────────────────── */
+
+/* Task completion gold flash */
+@keyframes fx-flash-anim {
+  0%   { background: color-mix(in srgb, var(--accent) 35%, var(--bg-panel)); border-color: var(--accent); }
+  50%  { background: color-mix(in srgb, var(--accent) 20%, var(--bg-panel)); }
+  100% { background: var(--bg-panel); border-color: var(--border); }
+}
+
+.task-item.fx-flash {
+  animation: fx-flash-anim 0.6s ease-out forwards;
+}
+
+/* Task slide-out on completion */
+@keyframes fx-slide-out {
+  0%   { opacity: 1; transform: translateX(0) scaleY(1); max-height: 80px; }
+  40%  { opacity: 0.4; transform: translateX(18px) scaleY(0.95); }
+  100% { opacity: 0; transform: translateX(40px) scaleY(0.6); max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; }
+}
+
+.task-item.fx-slide-out {
+  animation: fx-slide-out 0.38s cubic-bezier(0.4, 0, 1, 1) forwards;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Full-screen golden flash overlay on target reached */
+.fx-target-flash {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(200,146,42,0.35) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+
+.fx-target-flash.visible {
+  opacity: 1;
+  transition: opacity 0.15s ease-in;
+}
+
+/* Particle glyphs are positioned/animated via JS inline styles */
+/* but we give them a base so they inherit the font */
+.fx-particle {
+  font-family: 'Cinzel', serif;
+  will-change: transform, opacity;
+  text-shadow: 0 0 6px currentColor;
+}
