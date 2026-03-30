@@ -1,25 +1,21 @@
 {
-  "name": "Quest Log",
-  "short_name": "Quest Log",
-  "description": "Daily XP quest log",
-  "start_url": "/",
-  "scope": "/",
+  "name": "Habit Tracker — Daily XP",
+  "short_name": "HabitXP",
+  "description": "Daily habit tracker with XP gamification",
+  "start_url": ".",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#0d0b08",
-  "theme_color": "#0d0b08",
+  "background_color": "#0a0f1a",
+  "theme_color": "#0a0f1a",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "assets/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "assets/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }
