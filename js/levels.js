@@ -276,7 +276,7 @@ function generateShieldSVG(level, size = 56) {
 
   // ── Number label ──
   const numSize  = level >= 10 ? s * 0.28 : s * 0.32;
-  const numY     = s * 0.63;
+  const numY     = s * 0.42;
   const numColor = level >= 20 ? '#e8c84a'
     : level >= 15 ? '#e8f0f8'
     : level >= 10 ? '#c8ccd4'

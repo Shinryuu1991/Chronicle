@@ -29,46 +29,44 @@
         <button class="icon-btn" id="btn-reset" title="Reset Today" aria-label="Reset today">↺</button>
       </div>
     </div>
+    <!-- XP bar lives in the header so it stays visible while scrolling -->
+    <div class="header-xp">
+      <div class="header-xp-inner">
+        <div class="xp-top-row">
+          <div class="xp-numbers">
+            <div class="xp-current">
+              <span id="xp-earned">0</span>
+              <span class="xp-unit">XP</span>
+            </div>
+            <div class="xp-divider">/</div>
+            <div class="xp-target-display">
+              <span id="xp-target-display">80</span>
+              <span class="xp-unit">DAILY</span>
+            </div>
+          </div>
+          <div class="level-badge-wrap" id="level-badge-wrap" title="Your level"></div>
+        </div>
+        <div class="xp-bar-track">
+          <div class="xp-bar-fill" id="xp-bar"></div>
+          <div class="xp-bar-glow" id="xp-bar-glow"></div>
+        </div>
+        <div class="xp-meta-row">
+          <span class="xp-pct" id="xp-pct">0%</span>
+          <span class="xp-overflow hidden" id="xp-overflow">+0 OVERFLOW</span>
+        </div>
+        <div class="renown-row">
+          <span class="renown-label">Renown</span>
+          <div class="renown-bar-track">
+            <div class="renown-bar-fill" id="renown-bar"></div>
+          </div>
+          <span class="renown-label" id="renown-label">0 / 25</span>
+        </div>
+      </div>
+    </div>
   </header>
 
   <!-- ── MAIN ── -->
   <main class="app-main">
-
-    <!-- XP Dashboard -->
-    <section class="xp-section">
-      <div class="xp-top-row">
-        <div class="xp-numbers">
-          <div class="xp-current">
-            <span id="xp-earned">0</span>
-            <span class="xp-unit">XP</span>
-          </div>
-          <div class="xp-divider">/</div>
-          <div class="xp-target-display">
-            <span id="xp-target-display">80</span>
-            <span class="xp-unit">DAILY</span>
-          </div>
-        </div>
-        <div class="level-badge-wrap" id="level-badge-wrap" title="Your level">
-          <!-- SVG badge injected by JS -->
-        </div>
-      </div>
-      <div class="xp-bar-track">
-        <div class="xp-bar-fill" id="xp-bar"></div>
-        <div class="xp-bar-glow" id="xp-bar-glow"></div>
-      </div>
-      <div class="xp-meta-row">
-        <span class="xp-pct" id="xp-pct">0%</span>
-        <span class="xp-overflow hidden" id="xp-overflow">+0 OVERFLOW</span>
-      </div>
-      <!-- Renown / level progress -->
-      <div class="renown-row">
-        <span class="renown-label">Renown</span>
-        <div class="renown-bar-track">
-          <div class="renown-bar-fill" id="renown-bar"></div>
-        </div>
-        <span class="renown-label" id="renown-label">0 / 25</span>
-      </div>
-    </section>
 
     <!-- Stats Row -->
     <section class="stats-row">

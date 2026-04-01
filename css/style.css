@@ -101,6 +101,18 @@ body::before {
   opacity: 0.6;
 }
 
+.header-xp {
+  border-top: 1px solid var(--border);
+  background: var(--bg-panel);
+  transition: background 0.4s, border-color 0.4s;
+}
+
+.header-xp-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 0.875rem;
+}
+
 .header-inner {
   max-width: 680px;
   margin: 0 auto;
@@ -174,28 +186,7 @@ body::before {
   z-index: 1;
 }
 
-/* ── XP SECTION ────────────────────────────────────────────────────────────── */
-.xp-section {
-  background: var(--bg-panel);
-  border: 1px solid var(--border-light);
-  border-radius: 4px;
-  padding: 1.5rem 1.75rem;
-  box-shadow: var(--shadow-panel);
-  position: relative;
-  overflow: hidden;
-  transition: background 0.4s, border-color 0.4s;
-}
-
-.xp-section::after {
-  content: '— ✦ —';
-  position: absolute;
-  bottom: 0.5rem;
-  right: 0.875rem;
-  font-size: 0.55rem;
-  color: var(--text-muted);
-  opacity: 0.5;
-  letter-spacing: 0.3em;
-}
+/* ── XP BAR (lives in sticky header) ──────────────────────────────────────── */
 
 .xp-numbers {
   display: flex;
@@ -957,7 +948,7 @@ select { cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
   gap: 0.75rem;
 }
 
