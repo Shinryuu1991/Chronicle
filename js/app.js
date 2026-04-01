@@ -193,73 +193,11 @@ function renderWeek() {
 }
 
 // ── BUFF BANNER ───────────────────────────────────────────────────────────────
+// Buff info is now embedded in each task row as a collapsible dropdown.
+// This function just removes the old standalone banner if it still exists in DOM.
 function renderBuffBanner() {
-  let banner = document.getElementById('buff-banner');
-  if (!banner) {
-    // Insert before tasks section
-    const tasksSection = document.querySelector('.tasks-section');
-    banner = document.createElement('section');
-    banner.id = 'buff-banner';
-    banner.className = 'buff-banner';
-    tasksSection.parentNode.insertBefore(banner, tasksSection);
-  }
-
-  const now  = Date.now();
-  const slots = state.buffs.slots;
-
-  let html = `<div class="buff-banner-header"><span class="section-label">Daily Boons</span></div>`;
-  html += `<div class="buff-slots">`;
-
-  slots.forEach((slot, i) => {
-    const task    = state.tasks.find(t => t.id === slot.taskId);
-    const btype   = BUFF_TYPES.find(b => b.id === slot.type);
-    if (!task || !btype) return;
-
-    const isActivated = slot.activated;
-    const isExpired   = slot.type === 'timed_double' && isActivated && isTimedBuffExpired(slot);
-    const isConsumed  = slot.consumedBy !== null;
-
-    let statusClass = '';
-    let statusText  = '';
-    let timerText   = '';
-
-    if (!isActivated) {
-      statusClass = 'buff-pending';
-      statusText  = 'Complete trigger quest to activate';
-    } else if (slot.type === 'timed_double') {
-      if (isExpired) {
-        statusClass = 'buff-consumed';
-        statusText  = 'Expired';
-      } else {
-        const remaining = Math.ceil(((slot.activatedAt + btype.duration) - now) / 1000 / 60);
-        statusClass = 'buff-active';
-        statusText  = 'ACTIVE';
-        timerText   = `${remaining}m remaining`;
-      }
-    } else if (isConsumed) {
-      statusClass = 'buff-consumed';
-      statusText  = 'Consumed';
-    } else {
-      statusClass = 'buff-active';
-      statusText  = 'ACTIVE — awaiting next quest';
-    }
-
-    html += `
-      <div class="buff-slot ${statusClass}">
-        <div class="buff-icon">${btype.icon}</div>
-        <div class="buff-body">
-          <div class="buff-name">${btype.label}</div>
-          <div class="buff-trigger">Trigger: <em>${escHtml(task.name)}</em></div>
-          <div class="buff-desc">${btype.desc}</div>
-          ${timerText ? `<div class="buff-timer">${timerText}</div>` : ''}
-        </div>
-        <div class="buff-status-badge">${statusText}</div>
-      </div>
-    `;
-  });
-
-  html += `</div>`;
-  banner.innerHTML = html;
+  const old = document.getElementById('buff-banner');
+  if (old) old.remove();
 }
 
 function renderTaskList() {
@@ -277,7 +215,6 @@ function renderTaskList() {
     const aDone = completedSet.has(a.id) ? 1 : 0;
     const bDone = completedSet.has(b.id) ? 1 : 0;
     if (aDone !== bDone) return aDone - bDone;
-    // Buff tasks float to top within incomplete
     const aIsBuff = state.buffs.slots.some(s => s.taskId === a.id && !s.activated);
     const bIsBuff = state.buffs.slots.some(s => s.taskId === b.id && !s.activated);
     if (aIsBuff !== bIsBuff) return aIsBuff ? -1 : 1;
@@ -291,28 +228,59 @@ function renderTaskList() {
   }
 
   filtered.forEach(task => {
-    const done      = completedSet.has(task.id);
-    const cat       = CATEGORIES.find(c => c.id === task.category) || CATEGORIES[1];
-    const buffSlot  = getBuffSlotForTask(task.id, state.buffs);
-    const isBuff    = buffSlot !== null;
-    const buffType  = isBuff ? BUFF_TYPES.find(b => b.id === buffSlot.type) : null;
-    const buffDone  = isBuff && buffSlot.activated;
+    const done     = completedSet.has(task.id);
+    const cat      = CATEGORIES.find(c => c.id === task.category) || CATEGORIES[1];
+    const buffSlot = getBuffSlotForTask(task.id, state.buffs);
+    const isBuff   = buffSlot !== null;
+    const buffType = isBuff ? BUFF_TYPES.find(b => b.id === buffSlot.type) : null;
+    const buffDone = isBuff && buffSlot.activated;
 
-    // Check if any active buff will apply to this task
     const activeMultiplier = getPreviewMultiplier(task);
     const willDouble = activeMultiplier > 1;
 
-    const item = document.createElement('div');
-    item.className = 'task-item' +
-      (done    ? ' done'      : '') +
-      (isBuff && !buffDone && !done ? ' is-buff-trigger' : '') +
-      (willDouble && !done ? ' will-double' : '');
-    item.dataset.id = task.id;
-    item.style.setProperty('--cat-color', cat.color);
+    // ── Buff status for dropdown ──
+    let buffStatusClass = '';
+    let buffStatusText  = '';
+    let buffTimerText   = '';
+    if (isBuff) {
+      const now = Date.now();
+      if (!buffSlot.activated) {
+        buffStatusClass = 'boon-pending';
+        buffStatusText  = 'Pending';
+      } else if (buffSlot.type === 'timed_double') {
+        const expired = isTimedBuffExpired(buffSlot);
+        if (expired) {
+          buffStatusClass = 'boon-consumed';
+          buffStatusText  = 'Expired';
+        } else {
+          const remaining = Math.ceil(((buffSlot.activatedAt + buffType.duration) - now) / 1000 / 60);
+          buffStatusClass = 'boon-active';
+          buffStatusText  = 'Active';
+          buffTimerText   = `${remaining}m remaining`;
+        }
+      } else if (buffSlot.consumedBy) {
+        buffStatusClass = 'boon-consumed';
+        buffStatusText  = 'Consumed';
+      } else {
+        buffStatusClass = 'boon-active';
+        buffStatusText  = 'Active';
+      }
+    }
 
     const xpDisplay = willDouble && !done
       ? `<span class="xp-original">${task.xp}</span><span class="xp-doubled">${task.xp * 2}</span><span class="task-xp-unit">XP ×2</span>`
       : `${task.xp}<span class="task-xp-unit">XP</span>`;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'task-wrapper';
+
+    const item = document.createElement('div');
+    item.className = 'task-item' +
+      (done                          ? ' done'           : '') +
+      (isBuff && !buffDone && !done  ? ' is-buff-trigger': '') +
+      (willDouble && !done           ? ' will-double'    : '');
+    item.dataset.id = task.id;
+    item.style.setProperty('--cat-color', cat.color);
 
     item.innerHTML = `
       <button class="task-check" aria-label="${done ? 'Undo' : 'Complete'} ${task.name}">
@@ -320,12 +288,45 @@ function renderTaskList() {
       </button>
       <div class="task-body">
         <span class="task-name">${escHtml(task.name)}</span>
-        <span class="task-cat">${cat.label}${isBuff && !buffDone ? ` · <span class="buff-tag">${buffType.icon} ${buffType.label}</span>` : ''}</span>
+        <span class="task-cat">${cat.label}</span>
       </div>
-      <div class="task-xp">${xpDisplay}</div>
+      <div class="task-right">
+        <div class="task-xp">${xpDisplay}</div>
+        ${isBuff ? `<button class="buff-toggle-btn" aria-label="Show boon details">${buffType.icon}</button>` : ''}
+      </div>
     `;
+
     item.querySelector('.task-check').addEventListener('click', () => toggleTask(task.id));
-    list.appendChild(item);
+
+    wrapper.appendChild(item);
+
+    // ── Collapsible buff drawer ──
+    if (isBuff) {
+      const drawer = document.createElement('div');
+      drawer.className = 'buff-drawer';
+      drawer.hidden = true;
+      drawer.innerHTML = `
+        <div class="buff-drawer-inner">
+          <div class="buff-drawer-header">
+            <span class="buff-drawer-icon">${buffType.icon}</span>
+            <span class="buff-drawer-name">${buffType.label}</span>
+            <span class="buff-drawer-badge ${buffStatusClass}">${buffStatusText}</span>
+          </div>
+          <div class="buff-drawer-desc">${buffType.desc}</div>
+          ${buffTimerText ? `<div class="buff-drawer-timer">${buffTimerText}</div>` : ''}
+        </div>
+      `;
+      wrapper.appendChild(drawer);
+
+      item.querySelector('.buff-toggle-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        const open = !drawer.hidden;
+        drawer.hidden = open;
+        item.classList.toggle('buff-drawer-open', !open);
+      });
+    }
+
+    list.appendChild(wrapper);
   });
 }
 
@@ -479,7 +480,8 @@ function toggleTask(id) {
   showXPBurst(xpGained);
 
   if (el) {
-    slideOutTask(el, () => render());
+    const wrapper = el.closest('.task-wrapper') || el;
+    slideOutTask(wrapper, () => render());
   } else {
     render();
   }

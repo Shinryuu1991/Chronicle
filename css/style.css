@@ -800,138 +800,120 @@ select { cursor: pointer; }
 
 /* ── BUFF SYSTEM ───────────────────────────────────────────────────────────── */
 
-.buff-banner {
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1rem 1.25rem;
-  box-shadow: var(--shadow-card);
-  transition: background 0.4s, border-color 0.4s;
-}
-
-.buff-banner-header {
-  margin-bottom: 0.75rem;
-}
-
-.buff-slots {
+/* Wrapper holds both the task row and the hidden drawer */
+.task-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
-.buff-slot {
+/* Right-side container: XP + buff toggle button */
+.task-right {
   display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 3px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  transition: all 0.3s ease;
-  position: relative;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
-/* Pending — muted, waiting to be triggered */
-.buff-slot.buff-pending {
-  opacity: 0.7;
-}
-
-/* Active — glowing, ready to consume */
-.buff-slot.buff-active {
-  border-color: var(--accent-dim);
-  background: color-mix(in srgb, var(--accent) 8%, var(--bg-card));
-  box-shadow: 0 0 10px var(--accent-glow);
-}
-
-/* Consumed / expired — faded out */
-.buff-slot.buff-consumed {
-  opacity: 0.35;
-  filter: grayscale(0.5);
-}
-
-.buff-icon {
-  font-size: 1.4rem;
+/* Small icon button that opens the buff drawer */
+.buff-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
   line-height: 1;
-  min-width: 1.8rem;
-  text-align: center;
-  margin-top: 1px;
+  padding: 0;
+  opacity: 0.6;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.buff-toggle-btn:hover { opacity: 1; }
+.task-item.buff-drawer-open .buff-toggle-btn {
+  opacity: 1;
+  transform: rotate(15deg);
 }
 
-.buff-body {
+/* Collapsible drawer sits directly below the task row */
+.buff-drawer {
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg-card));
+  border: 1px solid var(--border-light);
+  border-top: none;
+  border-radius: 0 0 3px 3px;
+  overflow: hidden;
+}
+
+.buff-drawer-inner {
+  padding: 0.6rem 1rem 0.7rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.buff-drawer-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.buff-drawer-icon { font-size: 0.9rem; flex-shrink: 0; }
+
+.buff-drawer-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
   flex: 1;
   min-width: 0;
 }
 
-.buff-name {
-  font-family: 'Cinzel', serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--text-primary);
-  margin-bottom: 2px;
-}
-
-.buff-trigger {
-  font-family: 'Crimson Pro', serif;
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-  margin-bottom: 2px;
-}
-
-.buff-trigger em {
-  color: var(--accent);
-  font-style: italic;
-}
-
-.buff-desc {
-  font-family: 'IM Fell English', serif;
-  font-style: italic;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.buff-timer {
-  font-family: 'Cinzel', serif;
-  font-size: 0.68rem;
-  color: var(--accent);
-  margin-top: 3px;
-  letter-spacing: 0.06em;
-}
-
-.buff-status-badge {
+.buff-drawer-badge {
   font-family: 'Cinzel', serif;
   font-size: 0.55rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  padding: 0.2rem 0.5rem;
+  padding: 0.15rem 0.45rem;
   border-radius: 2px;
   white-space: nowrap;
-  align-self: flex-start;
-  margin-top: 2px;
+  flex-shrink: 0;
 }
 
-.buff-pending .buff-status-badge {
+.boon-pending {
   background: var(--bg-elevated);
   color: var(--text-muted);
   border: 1px solid var(--border);
 }
-
-.buff-active .buff-status-badge {
+.boon-active {
   background: color-mix(in srgb, var(--accent) 20%, transparent);
   color: var(--accent);
   border: 1px solid var(--accent-dim);
 }
-
-.buff-consumed .buff-status-badge {
+.boon-consumed {
   background: var(--bg-elevated);
   color: var(--text-muted);
   border: 1px solid var(--border);
 }
 
-/* Task row — buff trigger marker */
+.buff-drawer-desc {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.buff-drawer-timer {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+}
+
+/* Task row — buff trigger: dashed amber left border + subtle tint */
 .task-item.is-buff-trigger {
   border-left-width: 4px;
   border-left-style: dashed;
+  border-left-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 4%, var(--bg-panel));
 }
 
@@ -945,10 +927,10 @@ select { cursor: pointer; }
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--accent);
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
-/* Task row — will receive doubled XP */
+/* Task row — active buff will apply here */
 .task-item.will-double {
   background: color-mix(in srgb, var(--accent) 6%, var(--bg-panel));
   border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
@@ -960,25 +942,11 @@ select { cursor: pointer; }
   opacity: 0.5;
   margin-right: 3px;
 }
-
 .xp-doubled {
   color: var(--accent);
   font-size: 0.95rem;
   font-weight: 700;
 }
 
-/* Buff tag inside task category line */
-.buff-tag {
-  font-family: 'Cinzel', serif;
-  font-size: 0.58rem;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-  font-style: normal;
-}
-
 /* Edit list buff icon */
-.edit-buff-tag {
-  font-size: 0.9rem;
-  opacity: 0.7;
-  margin-left: 2px;
-}
+.edit-buff-tag { font-size: 0.9rem; opacity: 0.7; margin-left: 2px; }
