@@ -1,10 +1,11 @@
-const CACHE = 'quest-log-v1';
+const CACHE = 'quest-log-v2';
 
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/data.js',
+  './js/levels.js',
   './js/storage.js',
   './js/fx.js',
   './js/app.js',

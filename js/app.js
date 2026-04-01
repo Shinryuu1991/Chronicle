@@ -4,6 +4,7 @@ let state = {
   today:        { date: '', completed: [], xpEarned: 0 },
   settings:     { target: DEFAULT_XP_TARGET, streakBest: 0 },
   buffs:        { date: '', slots: [] },
+  player:       { level: 1, renown: 0, totalXP: 0 },
   activeFilter: 'all',
 };
 
@@ -13,6 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
   state.today    = loadToday();
   state.settings = loadSettings();
   state.buffs    = loadBuffs(state.tasks);
+  state.player   = loadPlayer();
+
+  // Sync daily cap to player's current level (in case they levelled up externally)
+  const levelCap = getCapForLevel(state.player.level);
+  if (state.settings.target !== levelCap) {
+    state.settings.target = levelCap;
+    saveSettings(state.settings);
+  }
 
   // Ensure xpEarned exists on today state
   if (state.today.xpEarned === undefined) state.today.xpEarned = 0;
@@ -29,14 +38,33 @@ document.addEventListener('DOMContentLoaded', () => {
 let lastDate = todayKey();
 function checkMidnight() {
   if (todayKey() !== lastDate) {
-    // Archive the day that just ended before loading the new one
-    archiveDay(state.today);
+    const result = archiveDay(state.today);
     lastDate       = todayKey();
     state.today    = loadToday();
     state.settings = loadSettings();
     state.buffs    = loadBuffs(state.tasks);
+    state.player   = loadPlayer();
+
+    if (result) {
+      // Auto-update cap to new level
+      const newCap = getCapForLevel(state.player.level);
+      state.settings.target = newCap;
+      saveSettings(state.settings);
+
+      if (result.didLevelUp) {
+        setTimeout(() => {
+          sfxLevelUp();
+          showToast(`⬆ Level ${state.player.level}! Daily cap now ${newCap} XP.`);
+          levelUpFlash();
+        }, 800);
+      } else {
+        const mult = result.multiplier > 1 ? ` (×${result.multiplier} streak)` : '';
+        showToast(`+${result.rawRenown} Renown earned${mult}. New day begins.`);
+      }
+    } else {
+      showToast('New day — quests refreshed. New buffs await.');
+    }
     render();
-    showToast('New day — quests refreshed. New buffs await.');
   }
 }
 
@@ -130,6 +158,7 @@ function populateCategoryDropdown(id) {
 function render() {
   renderHeader();
   renderXP();
+  renderLevel();
   renderStats();
   renderWeek();
   renderBuffBanner();
@@ -161,6 +190,29 @@ function renderXP() {
     overflow.classList.remove('hidden');
   } else {
     overflow.classList.add('hidden');
+  }
+}
+
+function renderLevel() {
+  const { level, renown } = state.player;
+  const prog = getLevelProgress(renown);
+
+  // Badge SVG
+  const wrap = document.getElementById('level-badge-wrap');
+  if (wrap) wrap.innerHTML = generateShieldSVG(level, 56);
+
+  // Renown bar
+  const bar = document.getElementById('renown-bar');
+  if (bar) bar.style.width = (prog.pct * 100) + '%';
+
+  // Renown label
+  const lbl = document.getElementById('renown-label');
+  if (lbl) {
+    if (level >= MAX_LEVEL) {
+      lbl.textContent = `${renown} Renown — Max Level`;
+    } else {
+      lbl.textContent = `${prog.progress} / ${prog.span}`;
+    }
   }
 }
 

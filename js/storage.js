@@ -6,6 +6,7 @@ const KEYS = {
   SETTINGS: 'ht_settings',
   TODAY:    'ht_today',
   BUFFS:    'ht_buffs',
+  PLAYER:   'ht_player',  // { level, renown, totalXP }
 };
 
 // ── BUFF TYPES ────────────────────────────────────────────────────────────────
@@ -107,17 +108,14 @@ function saveToday(todayState) {
 // Receives the previous day's state directly — never calls loadToday().
 
 function archiveDay(prevState) {
-  if (!prevState || !prevState.date) return;
+  if (!prevState || !prevState.date) return null;
 
   const history = load(KEYS.HISTORY, {});
-
-  // Don't re-archive if already saved
-  if (history[prevState.date]) return;
+  if (history[prevState.date]) return null; // already archived
 
   const xp = prevState.xpEarned != null
     ? prevState.xpEarned
     : (() => {
-        // Fallback: recalculate from task list if xpEarned wasn't tracked
         const tasks = load(KEYS.TASKS, []);
         return (prevState.completed || []).reduce((sum, id) => {
           const t = tasks.find(t => t.id === id);
@@ -125,11 +123,13 @@ function archiveDay(prevState) {
         }, 0);
       })();
 
-  history[prevState.date] = {
-    xp,
-    completed: prevState.completed || [],
-  };
+  history[prevState.date] = { xp, completed: prevState.completed || [] };
   save(KEYS.HISTORY, history);
+
+  // Award renown for this day
+  const settings = loadSettings();
+  const streak   = calcStreak(settings);
+  return awardDayRenown(xp, streak, settings.target);
 }
 
 function loadHistory() {
@@ -307,4 +307,44 @@ function loadWeekData(target, todayState) {
 
 function pruneOneoffs(tasks, today) {
   return tasks;
+}
+
+// ── Player State ──────────────────────────────────────────────────────────────
+
+function loadPlayer() {
+  return load(KEYS.PLAYER, { level: 1, renown: 0, totalXP: 0 });
+}
+
+function savePlayer(player) {
+  save(KEYS.PLAYER, player);
+}
+
+// Award renown for a completed day. Called from archiveDay.
+// Returns { player, didLevelUp, oldLevel }
+function awardDayRenown(xpEarned, streakDays, targetXP) {
+  const player      = loadPlayer();
+  const oldLevel    = player.level;
+  const multiplier  = getStreakMultiplier(streakDays);
+
+  // Only award renown if cap was hit
+  const hitCap = xpEarned >= targetXP;
+  const rawRenown = hitCap ? Math.round(xpEarned * multiplier) : Math.round(xpEarned * multiplier * 0.5);
+
+  player.renown  += rawRenown;
+  player.totalXP += xpEarned;
+  player.level    = getLevelFromRenown(player.renown);
+
+  // Auto-update daily cap to match new level (settings.target)
+  const newCap = getCapForLevel(player.level);
+
+  savePlayer(player);
+  return {
+    player,
+    rawRenown,
+    multiplier,
+    hitCap,
+    didLevelUp: player.level > oldLevel,
+    oldLevel,
+    newCap,
+  };
 }

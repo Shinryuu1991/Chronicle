@@ -261,3 +261,40 @@ function sfxBuffConsumed() {
     noise(t + 0.12, 0.08, 0.06, ctx);
   } catch(e) {}
 }
+
+// Level up — full triumphant fanfare, longer than target reached
+function sfxLevelUp() {
+  try {
+    const ctx = getCtx();
+    const t   = ctx.currentTime;
+    // Ascending arpeggio burst
+    [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+      tone(f,       'sawtooth', t + i * 0.07, 0.5,  0.10, ctx);
+      tone(f * 1.5, 'sine',     t + i * 0.07, 0.45, 0.04, ctx);
+    });
+    // Held chord at peak
+    [523.25, 659.25, 783.99, 1046.5].forEach(f => {
+      tone(f, 'sine', t + 0.55, 1.2, 0.12, ctx);
+    });
+    // Bell shimmer over the top
+    [1046.5, 1318.5, 1568.0, 2093.0].forEach((f, i) => {
+      tone(f, 'sine', t + 0.5 + i * 0.08, 1.0, 0.06, ctx);
+    });
+    noise(t + 0.5, 0.2, 0.05, ctx);
+  } catch(e) {}
+}
+
+// Full-screen silver-gold flash for level up
+function levelUpFlash() {
+  const el = document.createElement('div');
+  el.className = 'fx-levelup-flash';
+  el.innerHTML = `<div class="fx-levelup-text">LEVEL UP</div>`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => el.classList.add('visible'));
+  });
+  setTimeout(() => {
+    el.classList.remove('visible');
+    setTimeout(() => el.remove(), 800);
+  }, 1800);
+}
