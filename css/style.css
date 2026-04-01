@@ -444,6 +444,7 @@ body::before {
   padding: 0.75rem 1rem;
   transition: background 0.2s, border-color 0.2s, opacity 0.2s;
   box-shadow: var(--shadow-card);
+  position: relative;
 }
 
 .task-item:hover { background: var(--bg-card); }
@@ -795,4 +796,189 @@ select { cursor: pointer; }
   font-family: 'Cinzel', serif;
   will-change: transform, opacity;
   text-shadow: 0 0 6px currentColor;
+}
+
+/* ── BUFF SYSTEM ───────────────────────────────────────────────────────────── */
+
+.buff-banner {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+  transition: background 0.4s, border-color 0.4s;
+}
+
+.buff-banner-header {
+  margin-bottom: 0.75rem;
+}
+
+.buff-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.buff-slot {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Pending — muted, waiting to be triggered */
+.buff-slot.buff-pending {
+  opacity: 0.7;
+}
+
+/* Active — glowing, ready to consume */
+.buff-slot.buff-active {
+  border-color: var(--accent-dim);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-card));
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Consumed / expired — faded out */
+.buff-slot.buff-consumed {
+  opacity: 0.35;
+  filter: grayscale(0.5);
+}
+
+.buff-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  min-width: 1.8rem;
+  text-align: center;
+  margin-top: 1px;
+}
+
+.buff-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.buff-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.buff-trigger {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.buff-trigger em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.buff-desc {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.buff-timer {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  color: var(--accent);
+  margin-top: 3px;
+  letter-spacing: 0.06em;
+}
+
+.buff-status-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  white-space: nowrap;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.buff-pending .buff-status-badge {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.buff-active .buff-status-badge {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+}
+
+.buff-consumed .buff-status-badge {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+/* Task row — buff trigger marker */
+.task-item.is-buff-trigger {
+  border-left-width: 4px;
+  border-left-style: dashed;
+  background: color-mix(in srgb, var(--accent) 4%, var(--bg-panel));
+}
+
+.task-item.is-buff-trigger::after {
+  content: '✦ BOON';
+  position: absolute;
+  right: 0.6rem;
+  top: 0.35rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  opacity: 0.75;
+}
+
+/* Task row — will receive doubled XP */
+.task-item.will-double {
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg-panel));
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+
+.xp-original {
+  font-size: 0.7rem;
+  text-decoration: line-through;
+  opacity: 0.5;
+  margin-right: 3px;
+}
+
+.xp-doubled {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* Buff tag inside task category line */
+.buff-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  font-style: normal;
+}
+
+/* Edit list buff icon */
+.edit-buff-tag {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-left: 2px;
 }

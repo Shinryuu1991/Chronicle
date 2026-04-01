@@ -228,3 +228,36 @@ function targetReachedFlash() {
     setTimeout(() => el.remove(), 600);
   }, 500);
 }
+
+// Buff activated — mystical ascending shimmer (trigger quest completed)
+function sfxBuffActivated() {
+  try {
+    const ctx = getCtx();
+    const t   = ctx.currentTime;
+    // Rising shimmer — sine waves spread across frequencies
+    [261.63, 329.63, 392.00, 523.25, 659.25, 783.99].forEach((f, i) => {
+      tone(f,       'sine',     t + i * 0.05, 0.7, 0.09, ctx);
+      tone(f * 2,   'triangle', t + i * 0.05, 0.5, 0.03, ctx);
+    });
+    // Sparkle noise burst
+    noise(t + 0.1, 0.15, 0.05, ctx);
+    // Final held high note
+    tone(1046.5, 'sine', t + 0.35, 0.8, 0.10, ctx);
+  } catch(e) {}
+}
+
+// Buff consumed — satisfying double-hit (the doubled XP lands)
+function sfxBuffConsumed() {
+  try {
+    const ctx = getCtx();
+    const t   = ctx.currentTime;
+    // First hit
+    tone(523.25, 'triangle', t,        0.15, 0.15, ctx);
+    tone(659.25, 'triangle', t,        0.15, 0.10, ctx);
+    // Second hit (slightly higher, slightly delayed — the "double")
+    tone(659.25, 'triangle', t + 0.12, 0.4,  0.18, ctx);
+    tone(783.99, 'sine',     t + 0.12, 0.35, 0.10, ctx);
+    tone(1046.5, 'sine',     t + 0.12, 0.3,  0.05, ctx);
+    noise(t + 0.12, 0.08, 0.06, ctx);
+  } catch(e) {}
+}
